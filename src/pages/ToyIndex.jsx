@@ -10,8 +10,8 @@ import { loadToys, removeToyOptimistic, saveToy, setFilterBy } from '../store/ac
 
 import { ToyFilter } from '../cmps/ToyFilter.jsx'
 import { ToyList } from '../cmps/ToyList.jsx'
-// import { useEffectOnUpdate } from '../hooks/useEffectOnUpdate.js'
-// import { useOnlineStatus } from '../hooks/useOnlineStatus.js'
+import { useEffectOnUpdate } from '../hooks/useEffectOnUpdate.js'
+import { useOnlineStatus } from '../hooks/useOnlineStatus.js'
 
 export function ToyIndex() {
 
@@ -20,21 +20,17 @@ export function ToyIndex() {
     const filterBy = useSelector(storeState => storeState.toyModule.filterBy)
     const isLoading = useSelector(storeState => storeState.toyModule.isLoading)
 
-    // const isOnline = useOnlineStatus()
-
-    // useEffect(() => {
-    //     console.log(`status: ${isOnline ? 'online' : 'offline'}`)
-    // }, [isOnline])
-
-    // useEffectOnUpdate(() => {
-    //     loadToys()
-    //         .catch(err => {
-    //             showErrorMsg('Cannot load toys!')
-    //         })
-    // }, [filterBy])
+    const isOnline = useOnlineStatus()
 
     useEffect(() => {
+        console.log(`status: ${isOnline ? 'online' : 'offline'}`)
+    }, [isOnline])
+
+    useEffectOnUpdate(() => {
         loadToys()
+            .catch(err => {
+                showErrorMsg('Cannot load toys!')
+            })
     }, [filterBy])
 
     function onSetFilter(filterBy) {

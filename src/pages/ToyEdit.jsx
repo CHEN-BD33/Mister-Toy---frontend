@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toyService } from "../services/toy.service.local.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { saveToy } from "../store/actions/toy.actions.js"
-// import { useConfirmTabClose } from '../hooks/useConfirmTabClose.js'
+import { useConfirmTabClose } from '../hooks/useConfirmTabClose.js'
 
 
 export function ToyEdit() {
@@ -12,8 +12,8 @@ export function ToyEdit() {
     const [toyToEdit, setToyToEdit] = useState(toyService.getEmptyToy())
     const { toyId } = useParams()
 
-    // const hasChanges = useRef(false)
-    // useConfirmTabClose(hasChanges)
+    const hasChanges = useRef(false)
+    useConfirmTabClose(hasChanges)
 
     useEffect(() => {
         if (toyId) loadToy()
