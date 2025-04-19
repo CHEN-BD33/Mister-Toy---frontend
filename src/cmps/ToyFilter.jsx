@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 import { utilService } from "../services/util.service.js"
-import { toyService } from "../services/toy.service.local.js"
+import { toyService } from "../services/toy.service.js"
 
 export function ToyFilter({ filterBy, onSetFilter }) {
 
