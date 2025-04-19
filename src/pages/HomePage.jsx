@@ -6,13 +6,13 @@ import { CHANGE_BY } from "../store/reducers/user.reducer.js"
 // import logo from '../assets/img/logo.png'
 
 export function HomePage() {
-    const dispatch = useDispatch()
-    const [_count, setCount] = useState(10)
-    const count = useSelector(storeState => storeState.count)
+    // const dispatch = useDispatch()
+    // const [_count, setCount] = useState(10)
+    // const count = useSelector(storeState => storeState.count)
 
-    function changeCount(diff) {
-        dispatch({ type: CHANGE_BY, diff })
-    }
+    // function changeCount(diff) {
+    //     dispatch({ type: CHANGE_BY, diff })
+    // }
 
     // return (
         // <section>
