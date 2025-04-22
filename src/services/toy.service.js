@@ -11,7 +11,8 @@ export const toyService = {
     remove,
     getEmptyToy,
     getDefaultFilter,
-    getLabels
+    getLabels,
+    getPriceStats,
 }
 
 function query(filterBy = {}) {
@@ -62,4 +63,28 @@ function getDefaultFilter() {
 
 function getLabels() {
     return [...labels]
+}
+
+function getPriceStats() {
+    return query().then(toys => {
+        const priceByLabelMap = _getPriceByLabelMap(toys)
+        const data = Object.keys(priceByLabelMap).map(label => ({
+            title: label,
+            value: Math.round(priceByLabelMap[label].total / priceByLabelMap[label].count)
+        }))
+        return data
+    })
+}
+
+function _getPriceByLabelMap(toys) {
+    const map = {}
+    toys.forEach(toy => {
+        if (!toy.labels) return
+        toy.labels.forEach(label => {
+            if (!map[label]) map[label] = { total: 0, count: 0 }
+            map[label].total += toy.price
+            map[label].count++
+        })
+    })
+    return map
 }
