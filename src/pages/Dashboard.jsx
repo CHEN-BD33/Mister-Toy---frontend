@@ -12,7 +12,7 @@ export function Dashboard() {
 
     const [toys, setToys] = useState([])
     const [priceStats, setPriceStats] = useState([])
-    console.log('priceStats:', priceStats)
+    const [inventoryStats, setInventoryStats] = useState([])
 
     useEffect(() => {
         toyService.query()
@@ -20,6 +20,9 @@ export function Dashboard() {
 
         toyService.getPriceStats()
             .then(setPriceStats)
+
+        toyService.getInventoryByLabel()
+            .then(setInventoryStats)
     }, [])
 
     const data = {
@@ -46,14 +49,45 @@ export function Dashboard() {
         ],
     };
 
+    const inventoryData = {
+        labels: inventoryStats.map(s => s.title),
+        datasets: [
+            {
+                label: '% In Stock',
+                data: inventoryStats.map(s => s.value),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.3)',
+                    'rgba(54, 162, 235, 0.3)',
+                    'rgba(255, 206, 86, 0.3)',
+                    'rgba(75, 192, 192, 0.3)',
+                    'rgba(153, 102, 255, 0.3)',
+                    'rgba(255, 159, 64, 0.3)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    }
 
     return (
         <section className="dashboard">
             <h1>Dashboard</h1>
             <h2>Statistics for {toys.length} Toys</h2>
-            <h4>By Price</h4>
-            <Pie data={data} />
-
+            <section className='stats-price'>
+                <h4>By Price</h4>
+                <Pie data={data} />
+            </section>
+            <section className='stats-inventory'>
+                <h4>Inventory by Label</h4>
+                <Pie data={inventoryData} />
+            </section>
         </section>
     )
 }

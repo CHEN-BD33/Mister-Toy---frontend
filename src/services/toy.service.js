@@ -13,6 +13,7 @@ export const toyService = {
     getDefaultFilter,
     getLabels,
     getPriceStats,
+    getInventoryByLabel
 }
 
 function query(filterBy = {}) {
@@ -57,7 +58,7 @@ function _getRandomLabels() {
 }
 
 function getDefaultFilter() {
-    return { txt: '', maxPrice: '', inStock: undefined, labels: [], sortBy: 'name',sortDir: 1 }
+    return { txt: '', maxPrice: '', inStock: undefined, labels: [], sortBy: 'name', sortDir: 1 }
 }
 
 
@@ -76,6 +77,18 @@ function getPriceStats() {
     })
 }
 
+function getInventoryByLabel() {
+    return query().then(toys => {
+        const countByLabelMap = _getCountByLabelMap(toys)
+        const data = Object.keys(countByLabelMap)
+            .map(label => ({
+                title: label,
+                value: Math.round((countByLabelMap[label].inStock / countByLabelMap[label].total) * 100)
+            }))
+        return data
+    })
+}
+
 function _getPriceByLabelMap(toys) {
     const map = {}
     toys.forEach(toy => {
@@ -87,4 +100,17 @@ function _getPriceByLabelMap(toys) {
         })
     })
     return map
+}
+
+
+function _getCountByLabelMap(toys) {
+    return toys.reduce((map, toy) => {
+        if (!toy.labels) return map
+        toy.labels.forEach(label => {
+            if (!map[label]) map[label] = { total: 0, inStock: 0 }
+            map[label].total++
+            if (toy.inStock) map[label].inStock++
+        })
+        return map
+    }, {})
 }
