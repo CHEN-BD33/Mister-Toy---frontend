@@ -87,7 +87,6 @@ export function ToyIndex() {
                     ? <ToyList
                         toys={toys}
                         onRemoveToy={onRemoveToy}
-                        onEditToy={onEditToy}
                         addToCart={addToCart}
                     />
                     : <div>Loading...</div>
