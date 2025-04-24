@@ -5,11 +5,21 @@ import { toyService } from "../services/toy.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { saveToy } from "../store/actions/toy.actions.js"
 import { useConfirmTabClose } from '../hooks/useConfirmTabClose.js'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 
+const ToySchema = Yup.object().shape({
+    name: Yup.string()
+        .min(2, 'Name must be at least 2 characters')
+        .required('Name is required'),
+    price: Yup.number()
+        .positive('Price must be positive')
+        .required('Price is required'),
+})
 
 export function ToyEdit() {
     const navigate = useNavigate()
-    const [toyToEdit, setToyToEdit] = useState(toyService.getEmptyToy())
+    const [initialValues, setInitialValues] = useState(toyService.getEmptyToy())
     const { toyId } = useParams()
 
     const hasChanges = useRef(false)
@@ -21,24 +31,18 @@ export function ToyEdit() {
 
     function loadToy() {
         toyService.getById(toyId)
-            .then(toy => setToyToEdit(toy))
+            .then(toy => setInitialValues(toy))
             .catch(err => {
                 console.log('Had issues in toy edit', err)
                 navigate('/toy')
             })
     }
 
-    function handleChange({ target }) {
-        let { value, type, name: field } = target
-        value = type === 'number' ? +value : value
-        setToyToEdit((prevToy) => ({ ...prevToy, [field]: value }))
-        hasChanges.current = true
-    }
 
-    function onSaveToy(ev) {
-        ev.preventDefault()
-        if (!toyToEdit.price) toyToEdit.price = 1000
-        saveToy(toyToEdit)
+    const handleSubmit = (values, { setSubmitting }) => {
+        if (!values.price) values.price = 1000
+
+        saveToy(values)
             .then(() => {
                 showSuccessMsg('Toy Saved!')
                 navigate('/toy')
@@ -47,35 +51,60 @@ export function ToyEdit() {
                 console.log('Had issues in toy details', err)
                 showErrorMsg('Had issues in toy details')
             })
+            .finally(() => {
+                setSubmitting(false)
+            })
     }
 
     return (
         <section className="toy-edit">
-            <h2>{toyToEdit._id ? 'Edit' : 'Add'} Toy</h2>
+            <h2>{initialValues._id ? 'Edit' : 'Add'} Toy</h2>
 
-            <form onSubmit={onSaveToy} >
-                <label htmlFor="name">Name : </label>
-                <input type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Enter name..."
-                    value={toyToEdit.name}
-                    onChange={handleChange}
-                />
-                <label htmlFor="price">Price : </label>
-                <input type="number"
-                    name="price"
-                    id="price"
-                    placeholder="Enter price"
-                    value={toyToEdit.price}
-                    onChange={handleChange}
-                />
+            <Formik
+                enableReinitialize={true}
+                initialValues={initialValues}
+                validationSchema={ToySchema}
+                onSubmit={handleSubmit}
+            >
+                {({ isSubmitting, dirty }) => {
+                    useEffect(() => {
+                        hasChanges.current = dirty
+                    }, [dirty])
 
-                <div>
-                    <button>{toyToEdit._id ? 'Save' : 'Add'}</button>
-                    <Link to="/toy">Cancel</Link>
-                </div>
-            </form>
+                    return (
+                        <Form className="toy-form">
+                            <div className="form-group">
+                                <label htmlFor="name">Name:</label>
+                                <Field
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    placeholder="Enter name..."
+                                />
+                                <ErrorMessage name="name" component="div" className="error-message" />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="price">Price:</label>
+                                <Field
+                                    type="number"
+                                    name="price"
+                                    id="price"
+                                    placeholder="Enter price"
+                                />
+                                <ErrorMessage name="price" component="div" className="error-message" />
+                            </div>
+
+                            <div className="form-actions">
+                                <button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Saving...' : (initialValues._id ? 'Save' : 'Add')}
+                                </button>
+                                <Link to="/toy">Cancel</Link>
+                            </div>
+                        </Form>
+                    )
+                }}
+            </Formik>
         </section>
     )
 }
