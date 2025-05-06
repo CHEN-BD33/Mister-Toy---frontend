@@ -1,0 +1,104 @@
+/* Media queries Breakpoint mixins */
+
+@mixin for-mobile-layout {
+  @media (max-width: $break-narrow) {
+    @content;
+  }
+}
+
+@mixin for-narrow-layout {
+  @media (min-width: $break-narrow) {
+    @content;
+  }
+}
+
+@mixin for-normal-layout {
+  @media (min-width: $break-normal) {
+    @content;
+  }
+}
+
+@mixin for-wide-layout {
+  @media (min-width: $break-wide) {
+    @content;
+  }
+}
+
+@mixin layoutGTC($max) {
+  grid-template-columns:
+    minmax($layoutPadding, 1fr) minmax(auto, $max) minmax($layoutPadding, 1fr);
+}
+
+/* Media  Mixins */
+
+//aspect ratio mixin
+@mixin aspect-ratio($width: 1, $height: 1) {
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: calc(($height / $width) * 100%);
+  }
+
+  >* {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  >img {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Mixin for removing hover efects on iphone screen
+@mixin hover-supported {
+  @media not all and (pointer: coarse) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Buttons
+@mixin btn(
+  $bg: $clr2bg,
+  $padding: em(8px) em(12px),
+  $margin: em(8px),
+  $border-radius: em(4px),
+  $hover-bg: $clr2,
+  $hover-clr: white,
+) {
+  cursor: pointer;
+  background-color: $bg;
+  margin: $margin;
+  border: 0;
+  padding: $padding;
+  border-radius: $border-radius;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $hover-clr;
+    transition: .3s;
+  }
+}
+
+@mixin input-focus(
+  $focus-bg: $clr1bg,
+  $transition-time: 1s,
+  $padding: em(8px) em(12px),
+  $font-size: em(14px)) {
+  padding: $padding;
+  font-size: $font-size;
+
+  &:focus {
+    background-color: $focus-bg;
+    transition: background-color $transition-time;
+  }
+}

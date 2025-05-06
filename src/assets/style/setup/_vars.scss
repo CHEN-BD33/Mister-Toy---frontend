@@ -1,0 +1,24 @@
+  $clr1: #085581;
+  $clr2: #12ae3e;
+
+  $clr1bg: #9aa9d8;
+  $clr1bg-light: #c1f1e1;
+  $clr2bg: #329aaa;
+  $clr2bg-light: #e9d8a6;
+
+  $gray1: rgb(240, 240, 240);
+  $gray2: rgb(155, 155, 155);
+  $gray3: rgb(44, 44, 44);
+
+
+  // LAYOUT
+$layoutPadding: 20px;
+
+// LAYOUT BREAKPOINTS
+$break-narrow: 1200px;
+$break-normal: 1360px;
+$break-wide: 1920px;
+
+$padded-break-narrow: $break-narrow + $layoutPadding * 2;
+$padded-break-normal: $break-normal + $layoutPadding * 2;
+$padded-break-wide: $break-wide + $layoutPadding * 2;

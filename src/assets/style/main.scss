@@ -1,0 +1,37 @@
+/* Setup */
+@import 'setup/typography';
+@import 'setup/vars';
+@import 'setup/functions';
+@import 'setup/mixins';
+
+/* Base */
+@import 'base/base';
+@import 'base/helpers';
+@import 'base/layout';
+@import 'base/forms';
+
+/* Components */
+@import 'cmps/ToyIndex';
+@import 'cmps/AppHeader';
+@import 'cmps/UserMsg';
+
+@import 'cmps/ToyFilter';
+@import 'cmps/ToyList';
+@import 'cmps/ToyPreview';
+
+@import 'cmps/ShoppingCart';
+
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app > * {
+    width: 100%;
+}
+
+main {
+    flex-grow: 1;
+}

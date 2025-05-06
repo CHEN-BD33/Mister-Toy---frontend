@@ -1,0 +1,14 @@
+.app-header {
+    background-color: $clr1;
+    color: $clr1bg;
+    padding-block: em(12px);
+
+    @include for-normal-layout {
+        padding-block: em(16px);
+    }
+}
+
+.app-nav {
+    display: flex;
+    gap: em(15px);
+}

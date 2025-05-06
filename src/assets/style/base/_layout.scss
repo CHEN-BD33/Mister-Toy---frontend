@@ -1,0 +1,38 @@
+.main-layout {
+  margin: 0 auto;
+  padding-left: rem(16px);
+  padding-right: rem(16px);
+
+  @include for-normal-layout {
+    padding-left: rem(24px);
+    padding-right: rem(24px);
+  }
+
+  @include for-wide-layout {
+    padding-left: rem(25.6px);
+    padding-right: rem(25.6px);
+  }
+}
+
+.container {
+  max-width: em(1200px);
+  padding: em(12px);
+  margin: auto;
+
+  @include for-normal-layout {
+    max-width: rem(1360px);
+    padding: em(16px);
+  }
+
+  @include for-wide-layout {
+    max-width: rem(1920px);
+    padding: em(20px);
+  }
+}
+
+footer {
+  background-color: $clr1;
+  color: $clr1bg;
+  padding: em(16px);
+  text-align: center;
+}

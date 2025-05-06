@@ -2,12 +2,12 @@
   box-sizing: border-box;
 }
 
-html {
-}
+// html {
+// }
 
 body {
   margin: 0;
-  color: var(--gray3);
+  color: $gray3;
 }
 
 h1,
@@ -27,6 +27,10 @@ p {
 a {
   text-decoration: none;
   color: unset;
+
+  &.active {
+    text-decoration: underline;
+  }
 }
 
 
@@ -44,6 +48,3 @@ object {
   outline: 1px solid gold
 }
 
-a.active {
-  text-decoration: underline;
-}

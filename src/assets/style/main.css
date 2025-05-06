@@ -1,36 +1,279 @@
+@charset "UTF-8";
 /* Setup */
-@import './setup/typography.css';
-@import './setup/vars.css';
-
+@import url("https://fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Beginner&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 /* Base */
-@import 'base/base.css';
-@import 'base/helpers.css';
-@import 'base/layout.css';
-@import 'base/forms.css';
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: rgb(44, 44, 44);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0.5em 0 0.5em;
+  font-family: "Edu VIC WA NT Beginner", cursive;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+/* Dont stretch my Media */
+img,
+embed,
+video,
+object {
+  max-width: 100%;
+}
+
+/* Simple and useful CSS Debugging Technique */
+.debug * {
+  outline: 1px solid gold;
+}
+
+a.active {
+  text-decoration: underline;
+}
+
+/* flex helpers */
+.flex {
+  display: flex;
+}
+
+.flex.flex-column {
+  flex-direction: column;
+}
+
+.flex.justify-center {
+  justify-content: center;
+}
+
+.flex.justify-between {
+  justify-content: space-between;
+}
+
+.flex.align-center {
+  align-items: center;
+}
+
+/* text helpers */
+.colored-text {
+  color: #085581;
+}
+
+/* list helpers */
+.clean-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+/* font awsome */
+.fa {
+  font-family: fa;
+}
+
+.fa.fa-facebook::before {
+  content: "\f39e";
+}
+
+.fa.fa-twitter::before {
+  content: "\f099";
+}
+
+.fa.fa-dribbble::before {
+  content: "\f17d";
+}
+
+.fa.fa-behance::before {
+  content: "\f1b4";
+}
+
+.main-layout {
+  margin: 0 auto;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+}
+
+.container {
+  max-width: 800px;
+  padding: 1em;
+  margin: auto;
+}
+
+footer {
+  background-color: #085581;
+  color: #9aa9d8;
+  padding: 1em;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  background-color: #329aaa;
+  margin: 0.5em;
+  border: 0;
+  padding: 0.5em 0.8em;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #12ae3e;
+  color: white;
+  transition: 0.3s;
+}
+
+input:focus {
+  background-color: #9aa9d8;
+  transition: background-color 1s;
+}
 
 /* Components */
-@import './cmps/ToyIndex.css';
-@import './cmps/AppHeader.css';
-@import './cmps/ToggleBtn.css';
-@import './cmps/UserMsg.css';
+.add-btn {
+  margin: 0.6em;
+}
 
-@import './cmps/ToyFilter.css';
-@import './cmps/ToyList.css';
-@import './cmps/ToyPreview.css';
+.app-header {
+  background-color: #085581;
+  color: #9aa9d8;
+  padding-block: 1em;
+}
 
-@import 'cmps/ShoppingCart.css';
+.app-nav {
+  display: flex;
+  gap: 15px;
+}
 
+.toggle-btn input {
+  position: absolute;
+  opacity: 0;
+}
+
+.toggle-btn {
+  display: inline-block;
+  font-size: 20px; /* 1 */
+  height: 1em;
+  width: 2em;
+  background: #BDB9A6;
+  border-radius: 1em;
+}
+
+.toggle-btn div {
+  height: 1em;
+  width: 1em;
+  border-radius: 1em;
+  background: #FFF;
+  box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3);
+  transition: all 300ms;
+}
+
+.toggle-btn input:checked + div {
+  transform: translate3d(100%, 0, 0);
+  background: greenyellow;
+}
+
+.user-msg {
+  background-color: lightgray;
+  padding: 1.5em 2.5em;
+  position: fixed;
+  bottom: 0;
+  right: 1em;
+  color: white;
+  border-radius: 2px;
+  font-size: 1.1em;
+}
+
+.user-msg.success {
+  background-color: #085581;
+}
+
+.user-msg.error {
+  background-color: #12ae3e;
+}
+
+.user-msg button {
+  font-size: 0.8em;
+  float: right;
+  margin: 0.5em;
+}
+
+.toy-filter {
+  background-color: #329aaa;
+  padding: 1em;
+}
+
+.toy-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  gap: 0.6em;
+  margin-block: 0.6em;
+}
+
+.toy-list li {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: #9aa9d8;
+  padding: 0.65em;
+  border-radius: 30px;
+}
+
+.toy-preview {
+  text-align: center;
+  padding: 0.3em;
+  display: flex;
+  flex-direction: column;
+}
+
+.toy-preview h4 {
+  text-transform: capitalize;
+  color: black;
+}
+
+.toy-preview img {
+  max-width: 100px;
+}
+
+.cart {
+  background-color: #e9d8a6;
+  color: black;
+  padding: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.cart li button {
+  margin: 5px;
+}
 
 .app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .app > * {
-    width: 100%;
+  width: 100%;
 }
 
 main {
-    flex-grow: 1;
+  flex-grow: 1;
 }
+
+/*# sourceMappingURL=main.css.map */

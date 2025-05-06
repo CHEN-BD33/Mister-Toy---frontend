@@ -1,0 +1,14 @@
+.cart {
+    background-color: $clr2bg-light;
+    color: black;
+    padding: em(20px);
+    position: absolute;
+    top: em(10px);
+    right: em(10px);
+
+    li {
+        button {
+            @include btn($margin: em(5px))
+        }
+    }
+}

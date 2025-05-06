@@ -1,0 +1,16 @@
+.toy-preview {
+    text-align: center;
+    padding: em(4.8px);
+    display: flex;
+    flex-direction: column;
+
+    h4 {
+        text-transform: capitalize;
+        color: black;
+
+    }
+
+    img {
+        max-width: 100px;
+    }
+}

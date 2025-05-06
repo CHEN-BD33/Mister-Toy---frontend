@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sass": "sass src/assets/style/main.scss:src/assets/style/main.css",
+    "sass-dev": "sass --watch --update --style=expanded src/assets/style:src/assets/style/css"
   },
   "dependencies": {
     "axios": "^1.8.4",
@@ -20,6 +22,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.5.0",
     "redux": "^5.0.1",
+    "sass": "^1.87.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {
