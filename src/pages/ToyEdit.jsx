@@ -29,31 +29,29 @@ export function ToyEdit() {
         if (toyId) loadToy()
     }, [])
 
-    function loadToy() {
-        toyService.getById(toyId)
-            .then(toy => setInitialValues(toy))
-            .catch(err => {
-                console.log('Had issues in toy edit', err)
-                navigate('/toy')
-            })
+    async function loadToy() {
+        try {
+            const toy = await toyService.getById(toyId)
+            setInitialValues(toy)
+        } catch (err) {
+            console.log('Had issues in toy edit', err)
+            showErrorMsg('Cannot load toy')
+            navigate('/toy')
+        }
     }
 
-
-    const handleSubmit = (values, { setSubmitting }) => {
-        if (!values.price) values.price = 1000
-
-        saveToy(values)
-            .then(() => {
-                showSuccessMsg('Toy Saved!')
-                navigate('/toy')
-            })
-            .catch(err => {
-                console.log('Had issues in toy details', err)
-                showErrorMsg('Had issues in toy details')
-            })
-            .finally(() => {
-                setSubmitting(false)
-            })
+    async function handleSubmit(values, { setSubmitting }) {
+        try {
+            if (!values.price) values.price = 1000
+            await saveToy(values)
+            showSuccessMsg('Toy Saved!')
+            navigate('/toy')
+        } catch (err) {
+            console.log('Had issues in toy details', err)
+            showErrorMsg('Cannot save toy')
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     return (

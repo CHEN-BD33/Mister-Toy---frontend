@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import { utilService } from "../services/util.service.js"
 import { toyService } from "../services/toy.service.js"
+import { showErrorMsg } from '../services/event-bus.service.js'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
@@ -14,11 +15,33 @@ export function ToyFilter({ filterBy, onSetFilter }) {
 
     const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
     onSetFilter = useRef(utilService.debounce(onSetFilter, 300))
-    const labels = toyService.getLabels()
+    const [labels, setLabels] = useState([])
 
     useEffect(() => {
-        onSetFilter.current(filterByToEdit)
+        loadLabels()
+    }, [])
+
+    useEffect(() => {
+        async function applyFilter() {
+            try {
+                await onSetFilter.current(filterByToEdit)
+            } catch (err) {
+                showErrorMsg('Failed to apply filter')
+            }
+        }
+        applyFilter()
     }, [filterByToEdit])
+
+    async function loadLabels() {
+        try {
+            const labels = await toyService.getLabels()
+            setLabels(labels)
+        } catch (err) {
+            console.log('Error loading labels', err)
+            showErrorMsg('Cannot load filter labels')
+        }
+    }
+
 
     function handleFormikChange(values) {
         setFilterByToEdit(prevFilter => ({
@@ -66,8 +89,6 @@ export function ToyFilter({ filterBy, onSetFilter }) {
                 initialValues={{ txt: filterByToEdit.txt || '' }}
                 validationSchema={FilterSchema}
                 enableReinitialize={true}
-                onSubmit={(values) => {
-                }}
             >
                 {({ values, handleChange, errors, touched }) => (
                     <Form>
@@ -105,7 +126,7 @@ export function ToyFilter({ filterBy, onSetFilter }) {
                                         type="checkbox"
                                         id={`label-${label}`}
                                         value={label}
-                                        checked={filterByToEdit.labels?.includes(label) || false}
+                                        checked={filterByToEdit.labels?.includes(label)}
                                         onChange={handleLabelChange}
                                     />
                                     <label htmlFor={`label-${label}`}>{label}</label>

@@ -66,19 +66,25 @@ function getLabels() {
     return [...labels]
 }
 
-function getPriceStats() {
-    return query().then(toys => {
+async function getPriceStats() {
+    try {
+        const toys = await query()
         const priceByLabelMap = _getPriceByLabelMap(toys)
         const data = Object.keys(priceByLabelMap).map(label => ({
             title: label,
             value: Math.round(priceByLabelMap[label].total / priceByLabelMap[label].count)
         }))
         return data
-    })
+    } catch (err) {
+        console.error('Failed to get price stats:', err)
+        throw err
+    }
 }
 
-function getInventoryByLabel() {
-    return query().then(toys => {
+
+async function getInventoryByLabel() {
+    try {
+        const toys = await query()
         const countByLabelMap = _getCountByLabelMap(toys)
         const data = Object.keys(countByLabelMap)
             .map(label => ({
@@ -86,7 +92,10 @@ function getInventoryByLabel() {
                 value: Math.round((countByLabelMap[label].inStock / countByLabelMap[label].total) * 100)
             }))
         return data
-    })
+    } catch (err) {
+        console.error('Failed to get inventory by label:', err)
+        throw err
+    }
 }
 
 function _getPriceByLabelMap(toys) {

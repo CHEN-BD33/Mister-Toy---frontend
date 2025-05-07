@@ -27,54 +27,62 @@ export function ToyIndex() {
     }, [isOnline])
 
     useEffectOnUpdate(() => {
-        loadToys()
-            .catch(err => {
+        async function fetchToys() {
+            try {
+                await loadToys()
+            } catch (err) {
                 showErrorMsg('Cannot load toys!')
-            })
+            }
+        }
+        fetchToys()
     }, [filterBy])
 
-    function onSetFilter(filterBy) {
-        setFilterBy(filterBy)
+    async function onSetFilter(filterBy) {
+        try {
+            await setFilterBy(filterBy)
+        } catch (err) {
+            showErrorMsg('Cannot apply filter')
+        }
     }
 
-    function onRemoveToy(toyId) {
-        removeToyOptimistic(toyId)
-            .then(() => {
-                showSuccessMsg('Toy removed')
-            })
-            .catch(err => {
-                showErrorMsg('Cannot remove Toy')
-            })
+    async function onRemoveToy(toyId) {
+        try {
+            await removeToyOptimistic(toyId)
+            showSuccessMsg('Toy removed')
+        } catch (err) {
+            showErrorMsg('Cannot remove Toy')
+        }
     }
 
-    function onAddToy() {
+    async function onAddToy() {
         const toyToSave = toyService.getRandomToy()
-        saveToy(toyToSave)
-            .then((savedToy) => {
-                showSuccessMsg(`Toy added (id: ${savedToy._id})`)
-            })
-            .catch(err => {
-                showErrorMsg('Cannot add Toy')
-            })
+        try {
+            const savedToy = await saveToy(toyToSave)
+            showSuccessMsg(`Toy added (id: ${savedToy._id})`)
+        } catch (err) {
+            showErrorMsg('Cannot add Toy')
+        }
     }
 
-    function onEditToy(toy) {
-        const price = +prompt('New price?')
-        const toyToSave = { ...toy, price }
+    // async function onEditToy(toy) {
+    //     const price = +prompt('New price?')
+    //     const toyToSave = { ...toy, price }
 
-        saveToy(toyToSave)
-            .then((savedToy) => {
-                showSuccessMsg(`Toy updated to price: $${savedToy.price}`)
-            })
-            .catch(err => {
-                showErrorMsg('Cannot update Toy')
-            })
-    }
-
+    //     try {
+    //         const savedToy = await saveToy(toyToSave)
+    //         showSuccessMsg(`Toy updated to price: $${savedToy.price}`)
+    //     } catch (err) {
+    //         showErrorMsg('Cannot update Toy')
+    //     }
+    // }
     function addToCart(toy) {
-        console.log(`Adding ${toy.name} to Cart`)
-        dispatch({ type: ADD_TOY_TO_CART, toy })
-        showSuccessMsg('Added to Cart')
+        try {
+            console.log(`Adding ${toy.name} to Cart`)
+            dispatch({ type: ADD_TOY_TO_CART, toy })
+            showSuccessMsg('Added to Cart')
+        } catch (err) {
+            showErrorMsg('Cannot add to cart')
+        }
     }
 
     return (

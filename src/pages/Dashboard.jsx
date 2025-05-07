@@ -15,15 +15,24 @@ export function Dashboard() {
     const [inventoryStats, setInventoryStats] = useState([])
 
     useEffect(() => {
-        toyService.query()
-            .then(setToys)
-
-        toyService.getPriceStats()
-            .then(setPriceStats)
-
-        toyService.getInventoryByLabel()
-            .then(setInventoryStats)
+        loadData()
     }, [])
+
+    async function loadData() {
+        try {
+            const toysData = await toyService.query()
+            setToys(toysData)
+
+            const priceData = await toyService.getPriceStats()
+            setPriceStats(priceData)
+
+            const inventoryData = await toyService.getInventoryByLabel()
+            setInventoryStats(inventoryData)
+        } catch (err) {
+            console.log('Error loading dashboard data', err)
+            showErrorMsg('Cannot load dashboard data')
+        }
+    }
 
     const data = {
         labels: priceStats.map(s => s.title),
