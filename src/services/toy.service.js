@@ -16,24 +16,55 @@ export const toyService = {
     getInventoryByLabel
 }
 
-function query(filterBy = {}) {
-    return httpService.get(BASE_URL, filterBy)
+async function query(filterBy = {}) {
+    try {
+        const toys = await httpService.get(BASE_URL, filterBy)
+        return toys
+    } catch (err) {
+        loggerService.error('Failed to query toys', err)
+        throw new Error('Cannot fetch toys')
+    }
 }
 
-function getById(toyId) {
-    return httpService.get(BASE_URL + toyId)
 
+async function getById(toyId) {
+    try {
+        if (!toyId || typeof toyId !== 'string') {
+            throw new Error('Invalid toy ID')
+        }
+        const toy = await httpService.get(BASE_URL + toyId)
+        return toy
+    } catch (err) {
+        loggerService.error(`Failed to get toy with ID: ${toyId}`, err)
+        throw new Error('Cannot fetch toy')
+    }
 }
 
-function remove(toyId) {
-    return httpService.delete(BASE_URL + toyId)
+async function remove(toyId) {
+    try {
+        if (!toyId || typeof toyId !== 'string') {
+            throw new Error('Invalid toy ID')
+        }
+        await httpService.delete(BASE_URL + toyId)
+    } catch (err) {
+        loggerService.error(`Failed to remove toy with ID: ${toyId}`, err)
+        throw new Error('Cannot remove toy')
+    }
 }
 
-function save(toy) {
-    if (toy._id) {
-        return httpService.put(BASE_URL + toy._id, toy)
-    } else {
-        return httpService.post(BASE_URL, toy)
+async function save(toy) {
+    try {
+        if (!toy || typeof toy !== 'object') {
+            throw new Error('Invalid toy data')
+        }
+        if (toy._id) {
+            return await httpService.put(BASE_URL + toy._id, toy)
+        } else {
+            return await httpService.post(BASE_URL, toy)
+        }
+    } catch (err) {
+        loggerService.error('Failed to save toy', err)
+        throw new Error('Cannot save toy')
     }
 }
 
@@ -61,9 +92,13 @@ function getDefaultFilter() {
     return { txt: '', maxPrice: '', inStock: undefined, labels: [], sortBy: 'name', sortDir: 1 }
 }
 
-
-function getLabels() {
-    return [...labels]
+async function getLabels() {
+    try {
+        return [...labels]
+    } catch (err) {
+        loggerService.error('Failed to get labels', err)
+        throw new Error('Cannot fetch labels')
+    }
 }
 
 async function getPriceStats() {
