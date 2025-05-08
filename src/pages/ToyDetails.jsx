@@ -16,7 +16,7 @@ export function ToyDetails() {
     async function loadToy() {
         try {
             const toy = await toyService.getById(toyId)
-            setInitialValues(toy)
+            setToy(toy)
         } catch (err) {
             console.log('Had issues in toy edit', err)
             showErrorMsg('Cannot load toy')
